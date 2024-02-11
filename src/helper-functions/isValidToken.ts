@@ -6,7 +6,7 @@ function isTokenExpired(token: string) {
   const decoded = decodeJwt(token);
   const currentTime = Math.floor(Date.now() / 1000); // Convert to seconds
 
-  return decoded.exp < currentTime;
+  return decoded.exp > currentTime;
 }
 function decodeJwt(token: string) {
   const base64Url = token.split(".")[1];

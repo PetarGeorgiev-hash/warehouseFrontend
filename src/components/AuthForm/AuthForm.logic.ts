@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { EmailValidator } from "./AuthForm.static";
+import { EmailValidator, IAuthSubmit } from "./AuthForm.static";
+import { loginRequest } from "../../helper-functions/loginRequest";
+import { useNavigate } from "react-router-dom";
+import { routes } from "../../assets/routs";
 
 export const useAuthForm = () => {
   const [email, setEmail] = useState("");
@@ -7,15 +10,26 @@ export const useAuthForm = () => {
   const [isValidEmail, setIsValidEmial] = useState(true);
   const [isValidPassword, setIsValidPassword] = useState(true);
 
-  // const onSubmit = () => {
-  //     if (isValidEmail && isValidPassword) {
+  const navigate = useNavigate();
 
-  //     }
-  // }
+  const onSubmit = async ({ event, authType }: IAuthSubmit) => {
+    event.preventDefault();
+    if (isValidEmail && isValidPassword) {
+      const { access_token } = await loginRequest({
+        email: email,
+        password: password,
+        authType: authType,
+      });
+      if (access_token !== undefined) {
+        localStorage.setItem("token", access_token);
+
+        navigate(routes.home);
+      }
+    }
+  };
 
   const onEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const emailString = event.target.value;
-    console.log(isValidEmail);
 
     if (EmailValidator.test(emailString)) setIsValidEmial(true);
     else setIsValidEmial(false);
@@ -26,7 +40,7 @@ export const useAuthForm = () => {
   const onPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const passwordString = event.target.value;
 
-    if (passwordString.trim().length > 3) setIsValidPassword(true);
+    if (passwordString.trim().length > 2) setIsValidPassword(true);
     else setIsValidPassword(false);
 
     setPassword(passwordString);
@@ -39,5 +53,6 @@ export const useAuthForm = () => {
     password,
     isValidPassword,
     onPasswordChange,
+    onSubmit,
   };
 };

@@ -19,11 +19,14 @@ export const AuthForm = (props: IAuthForm) => {
     password,
     isValidPassword,
     onPasswordChange,
+    onSubmit,
   } = useAuthForm();
+
+  const authType = props.auth;
 
   return (
     <FormWrapper>
-      <FormComponent>
+      <FormComponent onSubmit={(event) => onSubmit({ event, authType })}>
         <FormLabel>Email</FormLabel>
         <FormInput
           name="email"
@@ -43,11 +46,11 @@ export const AuthForm = (props: IAuthForm) => {
           value={password}
         />
         {!isValidPassword && (
-          <FormP>password must be more that 3 characters long</FormP>
+          <FormP>password must be more that 2 characters long</FormP>
         )}
-        <FormButton>{props.auth}</FormButton>
+        <FormButton>{props.name}</FormButton>
         {props.isLogin && (
-          <label htmlFor="register" style={{ color: "black" }}>
+          <label style={{ color: "black" }}>
             If you are a new User{" "}
             <NavLink to={routes.register}>Register</NavLink>
           </label>
