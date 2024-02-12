@@ -22,7 +22,6 @@ export const useAuthForm = () => {
       });
       if (access_token !== undefined) {
         localStorage.setItem("token", access_token);
-
         navigate(routes.home);
       }
     }

@@ -7,6 +7,7 @@ interface ILoginFormObject {
 }
 
 export const loginRequest = async (formObj: ILoginFormObject) => {
+  const { email, password } = formObj;
   try {
     const response = await fetch(baseUrl + "auth/" + formObj.authType, {
       method: "POST",
@@ -14,7 +15,7 @@ export const loginRequest = async (formObj: ILoginFormObject) => {
         "Content-Type": "application/json",
       },
 
-      body: JSON.stringify(formObj),
+      body: JSON.stringify({ email, password }),
     });
 
     if (!response.ok) {

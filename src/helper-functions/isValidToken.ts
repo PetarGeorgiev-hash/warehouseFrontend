@@ -4,9 +4,13 @@ export const isValidToken = (token: string) => {
 
 function isTokenExpired(token: string) {
   const decoded = decodeJwt(token);
-  const currentTime = Math.floor(Date.now() / 1000); // Convert to seconds
+  const currentTime = Math.floor(Date.now() / 1000);
 
-  return decoded.exp > currentTime;
+  const obj = {
+    isValid: decoded.exp > currentTime,
+    expaireTime: decoded.exp - currentTime,
+  };
+  return obj;
 }
 function decodeJwt(token: string) {
   const base64Url = token.split(".")[1];

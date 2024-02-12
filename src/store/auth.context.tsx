@@ -2,22 +2,24 @@ import { ReactNode, createContext } from "react";
 import { isValidToken } from "../helper-functions/isValidToken";
 
 interface IAuthContext {
-  isLoggedIn: () => boolean;
+  isLoggedIn: () => { isValid: boolean; expTime: number };
 }
 
 export const AuthContext = createContext<IAuthContext>({
-  isLoggedIn: () => false,
+  isLoggedIn: () => ({ isValid: false, expTime: 0 }),
 });
-interface IReactChildren {
+export interface IReactChildren {
   children: ReactNode;
 }
 export const AuthContextProvider: React.FC<IReactChildren> = ({ children }) => {
   const isLoggedIn = () => {
     const token = checkStorage();
     if (token !== "" || undefined) {
-      return isValidToken(token);
+      const { isValid, expaireTime } = isValidToken(token);
+
+      return { isValid: isValid, expTime: expaireTime };
     }
-    return false;
+    return { isValid: false, expTime: 0 };
   };
 
   const checkStorage = () => {

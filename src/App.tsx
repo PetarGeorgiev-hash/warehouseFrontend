@@ -5,8 +5,9 @@ import ErrorHandler from "./pages/ErrorHandler.js";
 import { Register } from "./pages/Register.js";
 import { AuthContextProvider } from "./store/auth.context.js";
 import { AuthGuard } from "./pages/AuthGuard.js";
-import { Home } from "./pages/Home.js";
-import { Clients } from "./pages/Clients.js";
+import { Home } from "./pages/Home/Home.js";
+import { Clients } from "./pages/Clients/Clients.js";
+import { ClientsProvider } from "./store/clients.context.js";
 
 const router = createBrowserRouter([
   {
@@ -37,7 +38,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <AuthContextProvider>
-      <RouterProvider router={router} />
+      <ClientsProvider>
+        <RouterProvider router={router} />
+      </ClientsProvider>
     </AuthContextProvider>
   );
 }
